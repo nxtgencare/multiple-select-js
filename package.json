@@ -1,6 +1,6 @@
 {
   "name": "multiple-select-js",
-  "version": "1.2.6",
+  "version": "1.2.6.1",
   "description": "A simple javascript (non jQuery) library for multiple select component that supports Bootstrap 4 natively.",
   "main": "src/MultipleSelect.js",
   "scripts": {
