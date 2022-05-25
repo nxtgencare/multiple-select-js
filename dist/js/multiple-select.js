@@ -1,100 +1,13 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/MultipleSelect.js");
-/******/ })
-/************************************************************************/
-/******/ ({
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./node_modules/events/events.js":
 /*!***************************************!*\
   !*** ./node_modules/events/events.js ***!
   \***************************************/
-/*! no static exports found */
-/*! exports used: default */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
-"use strict";
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -151,6 +64,7 @@ function EventEmitter() {
   EventEmitter.init.call(this);
 }
 module.exports = EventEmitter;
+module.exports.once = once;
 
 // Backwards-compat with node 0.10.x
 EventEmitter.EventEmitter = EventEmitter;
@@ -162,6 +76,12 @@ EventEmitter.prototype._maxListeners = undefined;
 // By default EventEmitters will print a warning if more than 10 listeners are
 // added to it. This is a useful default which helps finding memory leaks.
 var defaultMaxListeners = 10;
+
+function checkListener(listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+  }
+}
 
 Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
   enumerable: true,
@@ -197,14 +117,14 @@ EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
   return this;
 };
 
-function $getMaxListeners(that) {
+function _getMaxListeners(that) {
   if (that._maxListeners === undefined)
     return EventEmitter.defaultMaxListeners;
   return that._maxListeners;
 }
 
 EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
-  return $getMaxListeners(this);
+  return _getMaxListeners(this);
 };
 
 EventEmitter.prototype.emit = function emit(type) {
@@ -256,9 +176,7 @@ function _addListener(target, type, listener, prepend) {
   var events;
   var existing;
 
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
-  }
+  checkListener(listener);
 
   events = target._events;
   if (events === undefined) {
@@ -295,7 +213,7 @@ function _addListener(target, type, listener, prepend) {
     }
 
     // Check for listener leak
-    m = $getMaxListeners(target);
+    m = _getMaxListeners(target);
     if (m > 0 && existing.length > m && !existing.warned) {
       existing.warned = true;
       // No error code for this since it is a Warning
@@ -327,12 +245,12 @@ EventEmitter.prototype.prependListener =
     };
 
 function onceWrapper() {
-  var args = [];
-  for (var i = 0; i < arguments.length; i++) args.push(arguments[i]);
   if (!this.fired) {
     this.target.removeListener(this.type, this.wrapFn);
     this.fired = true;
-    ReflectApply(this.listener, this.target, args);
+    if (arguments.length === 0)
+      return this.listener.call(this.target);
+    return this.listener.apply(this.target, arguments);
   }
 }
 
@@ -345,18 +263,14 @@ function _onceWrap(target, type, listener) {
 }
 
 EventEmitter.prototype.once = function once(type, listener) {
-  if (typeof listener !== 'function') {
-    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
-  }
+  checkListener(listener);
   this.on(type, _onceWrap(this, type, listener));
   return this;
 };
 
 EventEmitter.prototype.prependOnceListener =
     function prependOnceListener(type, listener) {
-      if (typeof listener !== 'function') {
-        throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
-      }
+      checkListener(listener);
       this.prependListener(type, _onceWrap(this, type, listener));
       return this;
     };
@@ -366,9 +280,7 @@ EventEmitter.prototype.removeListener =
     function removeListener(type, listener) {
       var list, events, position, i, originalListener;
 
-      if (typeof listener !== 'function') {
-        throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
-      }
+      checkListener(listener);
 
       events = this._events;
       if (events === undefined)
@@ -544,130 +456,55 @@ function unwrapListeners(arr) {
   return ret;
 }
 
-
-/***/ }),
-
-/***/ "./src/MultipleSelect.js":
-/*!*******************************!*\
-  !*** ./src/MultipleSelect.js ***!
-  \*******************************/
-/*! exports provided: default */
-/*! all exports used */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_Container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Container */ "./src/components/Container.js");
-/* harmony import */ var _store_Store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/Store */ "./src/store/Store.js");
-/* harmony import */ var _scss_multiple_select_scss__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scss/multiple-select.scss */ "./src/scss/multiple-select.scss");
-/* harmony import */ var _scss_multiple_select_scss__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_scss_multiple_select_scss__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-var selectMultipleContainerId = 0
-
-class MultipleSelect {
-  
-  constructor(elId, options) {
-    selectMultipleContainerId++
-
-    const defaultOptions = {
-      placeholder: 'Select'
+function once(emitter, name) {
+  return new Promise(function (resolve, reject) {
+    function errorListener(err) {
+      emitter.removeListener(name, resolver);
+      reject(err);
     }
 
-    this.$store = new _store_Store__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]()
-    let { el, select, isMultiple, items, selectedItems } = this._buildRootElement(elId)
-    this.$el = el
-    this.$select = select
-    this.$options = { ...defaultOptions, ...options }
-    this.$store.isMultiple = isMultiple
-    this.$store.items = items
-    this.$store.selectedItems = selectedItems
-
-    this.$container = new _components_Container__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
-      root: this
-    })
-
-    // syncing with the actual select
-    this.$store.on('selectedItemsChange', (selectedItems) => {
-      this.$select.querySelectorAll('option').forEach(option => {
-        if (selectedItems.find(item => item.value === option.value)) {
-          option.setAttribute('selected', true)
-        } else {
-          option.removeAttribute('selected')
-        }
-      })
-
-      if (selectedItems.length < 1) {
-        this.$select.value = ''
+    function resolver() {
+      if (typeof emitter.removeListener === 'function') {
+        emitter.removeListener('error', errorListener);
       }
+      resolve([].slice.call(arguments));
+    };
 
-      const changeEvent = document.createEvent('HTMLEvents')
-      changeEvent.initEvent('change', true, true)
-
-      const inputEvent = document.createEvent('HTMLEvents')
-      inputEvent.initEvent('input', true, true)
-      
-      this.$select.dispatchEvent(changeEvent)
-      this.$select.dispatchEvent(inputEvent)
-    })
-
-    // when the container is done rendered, the dropdown
-    // will automatically focused
-    let observer = new MutationObserver(() => {
-      if (this.$el.classList.contains('opened')) {
-        this.$container.$dropdownSelect.$input.focus()
-      }
-    })
-
-    observer.observe(this.$el, { attributes: true, childList: true });
-  }
-
-  /**
-   * Creating `<div>` for root element right after the `<select>` element.
-   * And then hide the `<select>` element.
-   *
-   * @param {*} elId
-   * @returns {*}
-   * @memberof MultipleSelect
-   */
-  _buildRootElement (elId) {
-    let select = document.querySelector(elId)
-    let root = document.createElement('div')
-    let items = []
-    let selectedItems = []
-
-    root.setAttribute('id', `multiple-select-container-${selectMultipleContainerId}`)
-    root.style.position = 'relative'
-    
-    Array.from(select.options).forEach(option => {
-      items.push({
-        value: option.value,
-        label: option.innerText.trim(),
-        disabled: option.disabled
-      })
-    })
-
-    // get the already selected items
-    Array.from(select.selectedOptions).forEach(option => {
-      selectedItems.push({ value: option.value, label: option.innerText.trim() })
-    })
-
-    select.insertAdjacentElement('afterend', root)
-    select.hidden = true
-    
-    const isMultiple = select.multiple
-
-    return {
-      select, el: root, isMultiple, items, selectedItems
+    eventTargetAgnosticAddListener(emitter, name, resolver, { once: true });
+    if (name !== 'error') {
+      addErrorHandlerIfEventEmitter(emitter, errorListener, { once: true });
     }
+  });
+}
+
+function addErrorHandlerIfEventEmitter(emitter, handler, flags) {
+  if (typeof emitter.on === 'function') {
+    eventTargetAgnosticAddListener(emitter, 'error', handler, flags);
   }
 }
 
-window.MultipleSelect = MultipleSelect
-
-/* harmony default export */ __webpack_exports__["default"] = (MultipleSelect);
+function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
+  if (typeof emitter.on === 'function') {
+    if (flags.once) {
+      emitter.once(name, listener);
+    } else {
+      emitter.on(name, listener);
+    }
+  } else if (typeof emitter.addEventListener === 'function') {
+    // EventTarget does not have `error` event semantics like Node
+    // EventEmitters, we do not listen for `error` events here.
+    emitter.addEventListener(name, function wrapListener(arg) {
+      // IE does not have builtin `{ once: true }` support so we
+      // have to do it manually.
+      if (flags.once) {
+        emitter.removeEventListener(name, wrapListener);
+      }
+      listener(arg);
+    });
+  } else {
+    throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type ' + typeof emitter);
+  }
+}
 
 
 /***/ }),
@@ -676,11 +513,11 @@ window.MultipleSelect = MultipleSelect
 /*!*************************************!*\
   !*** ./src/components/Container.js ***!
   \*************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _dropdown_DropdownSelect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dropdown/DropdownSelect */ "./src/components/dropdown/DropdownSelect.js");
 /* harmony import */ var _SelectButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SelectButton */ "./src/components/SelectButton.js");
 
@@ -718,12 +555,12 @@ class Container {
   }
 
   _buildButton () {
-    this.$button = new _SelectButton__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]({ root: this.$root })
+    this.$button = new _SelectButton__WEBPACK_IMPORTED_MODULE_1__["default"]({ root: this.$root })
     this.$root.$el.appendChild(this.$button.el)
   }
 
   _buildDropdownSelect () {
-    this.$dropdownSelect = new _dropdown_DropdownSelect__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({
+    this.$dropdownSelect = new _dropdown_DropdownSelect__WEBPACK_IMPORTED_MODULE_0__["default"]({
       container: this
     })
   }
@@ -745,7 +582,7 @@ class Container {
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Container);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Container);
 
 /***/ }),
 
@@ -753,11 +590,11 @@ class Container {
 /*!***************************************!*\
   !*** ./src/components/SearchInput.js ***!
   \***************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 class SearchInput {
 
   constructor({ root, dropdownSelect }) {
@@ -859,7 +696,7 @@ class SearchInput {
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (SearchInput);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SearchInput);
 
 /***/ }),
 
@@ -867,11 +704,11 @@ class SearchInput {
 /*!****************************************!*\
   !*** ./src/components/SelectButton.js ***!
   \****************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 class SelectButton {
   constructor ({ root }) {
     this.$root = root
@@ -946,7 +783,7 @@ class SelectButton {
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (SelectButton);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SelectButton);
 
 /***/ }),
 
@@ -954,11 +791,11 @@ class SelectButton {
 /*!***************************************************!*\
   !*** ./src/components/dropdown/DropdownSelect.js ***!
   \***************************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var _SearchInput__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../SearchInput */ "./src/components/SearchInput.js");
 /* harmony import */ var _Item__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Item */ "./src/components/dropdown/Item.js");
 
@@ -991,9 +828,11 @@ class DropdownSelect {
   }
 
   _buildSearchInput () {
-    this.$input = new _SearchInput__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]({ root: this.$container.$root, dropdownSelect: this })
-    this.$dropdownSelect.appendChild(this.$input.el)
-    this.$input.render()
+    this.$input = new _SearchInput__WEBPACK_IMPORTED_MODULE_0__["default"]({ root: this.$container.$root, dropdownSelect: this })
+    if (this.$container.$root.$options.search) {
+      this.$dropdownSelect.appendChild(this.$input.el)
+      this.$input.render()
+    }
   }
 
   _buildOptionItems () {
@@ -1015,7 +854,7 @@ class DropdownSelect {
     }
 
     this.filteredItems.forEach((item, index) => {
-      let itemDom = new _Item__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]({
+      let itemDom = new _Item__WEBPACK_IMPORTED_MODULE_1__["default"]({
         root: this.$container.$root,
         dropdownSelect: this,
         item,
@@ -1094,7 +933,7 @@ class DropdownSelect {
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (DropdownSelect);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DropdownSelect);
 
 /***/ }),
 
@@ -1102,11 +941,11 @@ class DropdownSelect {
 /*!*****************************************!*\
   !*** ./src/components/dropdown/Item.js ***!
   \*****************************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /**
  * Class for handling `<li>` element for item options.
  *
@@ -1190,18 +1029,7 @@ class Item {
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Item);
-
-/***/ }),
-
-/***/ "./src/scss/multiple-select.scss":
-/*!***************************************!*\
-  !*** ./src/scss/multiple-select.scss ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Item);
 
 /***/ }),
 
@@ -1209,16 +1037,16 @@ class Item {
 /*!****************************!*\
   !*** ./src/store/Store.js ***!
   \****************************/
-/*! exports provided: default */
-/*! exports used: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
 /* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(events__WEBPACK_IMPORTED_MODULE_0__);
 
 
-class Store extends events__WEBPACK_IMPORTED_MODULE_0___default.a {
+class Store extends (events__WEBPACK_IMPORTED_MODULE_0___default()) {
   
   get isMultiple () {
     return this._isMultiple || false
@@ -1302,9 +1130,213 @@ class Store extends events__WEBPACK_IMPORTED_MODULE_0___default.a {
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Store);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Store);
 
 /***/ })
 
-/******/ });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!*******************************!*\
+  !*** ./src/MultipleSelect.js ***!
+  \*******************************/
+/* harmony import */ var _components_Container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Container */ "./src/components/Container.js");
+/* harmony import */ var _store_Store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/Store */ "./src/store/Store.js");
+
+
+
+var selectMultipleContainerId = 0
+
+class MultipleSelect {
+  
+  constructor(elId, options) {
+    selectMultipleContainerId++
+
+    const defaultOptions = {
+      placeholder: 'Select',
+      search: true
+    }
+
+    this.$store = new _store_Store__WEBPACK_IMPORTED_MODULE_1__["default"]()
+    let { el, select, isMultiple, items, selectedItems } = this._buildRootElement(elId)
+    this.$el = el
+    this.$select = select
+    this.$options = { ...defaultOptions, ...options }
+    this.$store.isMultiple = isMultiple
+    this.$store.items = items
+    this.$store.selectedItems = selectedItems
+    this.update = e => {
+      let values = Array.from(select.selectedOptions).map(el => el.value)
+      let selectedItems = this.$store.selectedItems.map(item => item.value)
+      let isTheSameLength = values.length === selectedItems.length
+
+      function isTheSameComponents () {
+        let found = true
+
+        values.forEach(value => {
+          if (!selectedItems.find(item => item === value)) {
+            found = false
+            return
+          }
+        })
+
+        return found
+      }
+
+      if (!isTheSameLength || !isTheSameComponents()) {
+        // console.log('changed through js', values, selectedItems)
+        this.$store.selectedItems = this.$store.items.filter(item => {
+          return values.find(value => value === item.value)
+        })
+      }
+    }
+
+    this.$container = new _components_Container__WEBPACK_IMPORTED_MODULE_0__["default"]({
+      root: this
+    })
+
+    // syncing with the actual select
+    this.$store.on('selectedItemsChange', (selectedItems) => {
+      this.$select.querySelectorAll('option').forEach(option => {
+        if (selectedItems.find(item => item.value === option.value)) {
+          option.setAttribute('selected', true)
+        } else {
+          option.removeAttribute('selected')
+        }
+      })
+
+      if (selectedItems.length < 1) {
+        this.$select.value = ''
+      }
+
+      const changeEvent = document.createEvent('HTMLEvents')
+      changeEvent.initEvent('change', true, true)
+
+      const inputEvent = document.createEvent('HTMLEvents')
+      inputEvent.initEvent('input', true, true)
+      
+      this.$select.dispatchEvent(changeEvent)
+      this.$select.dispatchEvent(inputEvent)
+    })
+
+    // when the container is done rendered, the dropdown
+    // will automatically focused
+    let observer = new MutationObserver(() => {
+      if (this.$el.classList.contains('opened')) {
+        this.$container.$dropdownSelect.$input.focus()
+      }
+    })
+
+    observer.observe(this.$el, { attributes: true, childList: true });
+  }
+
+  /**
+   * Creating `<div>` for root element right after the `<select>` element.
+   * And then hide the `<select>` element.
+   *
+   * @param {*} elId
+   * @returns {*}
+   * @memberof MultipleSelect
+   */
+  _buildRootElement (elId) {
+    let select = document.querySelector(elId)
+    let root = document.createElement('div')
+    let items = []
+    let selectedItems = []
+
+    root.setAttribute('id', `multiple-select-container-${selectMultipleContainerId}`)
+    root.style.position = 'relative'
+    
+    Array.from(select.options).forEach(option => {
+      items.push({
+        value: option.value,
+        label: option.innerText.trim(),
+        disabled: option.disabled
+      })
+    })
+
+    // get the already selected items
+    Array.from(select.selectedOptions).forEach(option => {
+      selectedItems.push({ value: option.value, label: option.innerText.trim() })
+    })
+
+    // add event listener when <select> element changed via js
+    select.addEventListener('change', this.update)
+    select.insertAdjacentElement('afterend', root)
+    select.hidden = true
+    
+
+    let isMultiple = select.multiple
+
+    return {
+      select, el: root, isMultiple, items, selectedItems
+    }
+  }
+}
+
+window.MultipleSelect = MultipleSelect
+
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = (MultipleSelect);
+
+})();
+
+/******/ })()
+;
 //# sourceMappingURL=multiple-select.js.map

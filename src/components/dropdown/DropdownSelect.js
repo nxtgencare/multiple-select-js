@@ -29,8 +29,10 @@ class DropdownSelect {
 
   _buildSearchInput () {
     this.$input = new SearchInput({ root: this.$container.$root, dropdownSelect: this })
-    this.$dropdownSelect.appendChild(this.$input.el)
-    this.$input.render()
+    if (this.$container.$root.$options.search) {
+      this.$dropdownSelect.appendChild(this.$input.el)
+      this.$input.render()
+    }
   }
 
   _buildOptionItems () {

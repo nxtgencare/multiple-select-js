@@ -1,6 +1,5 @@
 import Container from './components/Container'
 import Store from './store/Store'
-import './scss/multiple-select.scss'
 
 var selectMultipleContainerId = 0
 
@@ -10,7 +9,8 @@ class MultipleSelect {
     selectMultipleContainerId++
 
     const defaultOptions = {
-      placeholder: 'Select'
+      placeholder: 'Select',
+      search: true
     }
 
     this.$store = new Store()
@@ -21,6 +21,31 @@ class MultipleSelect {
     this.$store.isMultiple = isMultiple
     this.$store.items = items
     this.$store.selectedItems = selectedItems
+    this.update = e => {
+      let values = Array.from(select.selectedOptions).map(el => el.value)
+      let selectedItems = this.$store.selectedItems.map(item => item.value)
+      let isTheSameLength = values.length === selectedItems.length
+
+      function isTheSameComponents () {
+        let found = true
+
+        values.forEach(value => {
+          if (!selectedItems.find(item => item === value)) {
+            found = false
+            return
+          }
+        })
+
+        return found
+      }
+
+      if (!isTheSameLength || !isTheSameComponents()) {
+        // console.log('changed through js', values, selectedItems)
+        this.$store.selectedItems = this.$store.items.filter(item => {
+          return values.find(value => value === item.value)
+        })
+      }
+    }
 
     this.$container = new Container({
       root: this
@@ -92,33 +117,7 @@ class MultipleSelect {
     })
 
     // add event listener when <select> element changed via js
-    select.addEventListener('change', e => {
-      let values = Array.from(select.selectedOptions).map(el => el.value)
-      let selectedItems = this.$store.selectedItems.map(item => item.value)
-      let isTheSameLength = values.length === selectedItems.length
-
-      function isTheSameComponents () {
-        let found = true
-
-        console.log({ values, selectedItems })
-        values.forEach(value => {
-          if (!selectedItems.find(item => item === value)) {
-            found = false
-            return
-          }
-        })
-
-        return found
-      }
-
-      if (!isTheSameLength || !isTheSameComponents()) {
-        // console.log('changed through js', values, selectedItems)
-        this.$store.selectedItems = this.$store.items.filter(item => {
-          return values.find(value => value === item.value)
-        })
-      }
-    })
-
+    select.addEventListener('change', this.update)
     select.insertAdjacentElement('afterend', root)
     select.hidden = true
     
